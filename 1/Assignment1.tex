@@ -1,0 +1,160 @@
+\documentclass{article}
+\usepackage{times}
+\usepackage{a4wide}
+\usepackage{latexsym}
+\usepackage{mathrsfs}
+\usepackage{amsmath}
+\usepackage{amssymb}
+\usepackage{amsthm}
+\usepackage{ifthen}
+\usepackage{stmaryrd}
+\usepackage{algorithm}
+\usepackage{ctex}
+%\usepackage{algorithmic}
+\usepackage{algpseudocode}
+\usepackage{graphics}
+\usepackage{epsfig}
+\usepackage{setspace}
+\setstretch{1}
+%\usepackage{ramacros}
+
+\addtolength{\textwidth}{20mm}
+\addtolength{\oddsidemargin}{-10mm}
+\addtolength{\textheight}{18mm}
+\addtolength{\topmargin}{-9mm}
+
+
+\newcounter{exercise}
+\setcounter{exercise}{0}
+\newcommand{\exercise}{
+        \addtocounter{exercise}{1}
+        \vspace{0.2in}
+        \noindent
+        {\bf \theexercise .}
+        }
+
+
+\newcommand{\solution}{
+    \vspace{0.2in}
+    \noindent
+    {\bf Solution:}
+    }
+
+
+\newcommand{\REMARK}[1]{}
+
+
+\newcommand{\NEWPART}{\vspace{.1in}
+              \noindent}
+
+\newcommand{\<}{
+    \langle}
+
+\renewcommand{\>}{
+    \rangle}
+
+\newcommand{\ceil}[1]{\left\lceil #1 \right\rceil}
+
+\pagestyle{plain} \pagenumbering{arabic}
+
+\title{{\bf Assignment 1} \\ {\large Deadline: Mar. 22}}
+
+\author{125033910296 李博洋}
+\date{}
+
+\begin{document}
+\maketitle
+
+%{\large \noindent
+%\begin{tabular}{lcl}
+%{Jan 17 2007}.
+%\end{tabular}
+%}
+
+{\large
+
+
+\begin{exercise}
+Prove the correctness of Dijkstra's shortest path algorithm.
+\end{exercise}
+
+\solution{
+通过归纳法+反证法进行证明\\
+\textbf{初始化：}\\
+$dist[s] = 0$, $dist[s]$ 是到s的最短路。\\
+对于每次引入的点$u_i$, 只需要保证$dist[u_i]$是最短路时，更新后的$dist[u_{i+1}]$也是最短路,则可以证明dijkstra的正确性。\\
+\textbf{反证：}\\
+当$dist[u_i]$为最短路时，存在一条路$P$，使$L[P] < dist[u_{i+1}]$。
+记算法迭代的过程中，$dist[u_i]$为最短路时，已加入最短路的点的集合为$S_i$。
+由于$L[P] < dist[u_{i+1}]$，则$P$中至少有一个点不在$S_i$中，记第一个不在$S_i$中的点为$x$。
+$P$上有边$(y, x), y \in S_i, x \notin S_i$，则$L[P_{s \to x}] \leq L[P] < dist[u_{i+1}]$。\\
+而又因为$y \in S_i$，则$dist[y]$为最短路，有
+$dist[x] \leq dist[y] + w(y, x) \leq L[P_{s \to y}] + w(y, x) = L[P_{s \to x}]$。\\
+而又因为dijkstra的每次迭代过程中用$dist$最小的点，因此有$dist[u_{i+1}] \leq dist[x]$。\\
+由上可得$dist[u_{i+1}] \leq dist[x] \leq L[P_{s \to x}] < dist[u_{i+1}]$矛盾。\\
+因此，dijkstra的正确性得证。
+}
+
+
+\begin{exercise}
+In the 2SAT problem, you are given a set of clauses, where each clause is the disjunction of two literals. You are looking for a way to assign a value true or false to each of the variables so that all clauses are satisfied, that is, there is at least one true literal in each clause. Find a way of solving 2SAT efficiently.
+[for detailed explanation, referred to 3.28 of DPV07]
+\end{exercise}
+
+\solution{
+
+
+
+}
+
+
+\begin{exercise}
+Given $G$, calculate the minimum number of additional directed edges required to make the entire graph $G$ strongly connected.
+
+\end{exercise}
+
+
+\begin{exercise}
+A \emph{scorpion} is an undirected graph $G$ of the following form: there are three
+special vertices, called the sting, the tail, and the body, of degree $1$, $2$,
+and $n - 2$, respectively. The sting is connected only to the tail; the tail is
+connected only to the sting and the body; and the body is connected to
+all vertices except the sting. The other vertices of $G$ may be connected to
+each other arbitrarily.
+
+\centerline{\includegraphics{figures/scorpion}}
+
+
+Give an algorithm that makes only $O(n)$ probes of the adjacency matrix of
+$G$ and determines whether $G$ is a scorpion.
+\end{exercise}
+
+
+\begin{exercise}
+You are the Chief Engineer of a galactic trade network. The network consists of $N$ star systems and $M$ one-way jump gates. Each jump gate from system $u$ to $v$ has a toll cost $w$.
+
+Within this galaxy, some systems are part of ``Trade Federations''. A Trade Federation is a maximal group of systems where every system can reach every other system using existing jump gates.
+
+\begin{description}
+\item[Internal Travel]: Traveling between two systems within the same federation is subsidized—the toll cost is effectively
+\item[External Travel]: Traveling between two different federations requires paying the toll of the jump gate used.
+\end{description}
+
+The Galactic Council wants to build new bidirectional bridges between different Trade Federations to ensure that every system in the galaxy can reach every other system.
+
+However, they want to spend the minimum amount possible on the tolls of the jump gates that will ''connect'' these federations.
+
+Find the minimum total toll cost of a set of existing jump gates that, if converted into bidirectional bridges, would make the entire galaxy strongly connected.
+\end{exercise}
+
+
+
+
+\begin{exercise}
+ \textbf{Minimum Bottleneck Spanning Tree}: Given a connected graph $ G $ with positive edge costs, find a
+ spanning tree that {minimizes the most expensive edge}.
+\end{exercise}
+
+
+
+\end{document}
