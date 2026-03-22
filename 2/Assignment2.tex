@@ -1,0 +1,163 @@
+\documentclass{article}
+\usepackage{times}
+\usepackage{a4wide}
+\usepackage{latexsym}
+\usepackage{mathrsfs}
+\usepackage{amsmath}
+\usepackage{amssymb}
+\usepackage{amsthm}
+\usepackage{ifthen}
+\usepackage{stmaryrd}
+\usepackage{algorithm}
+\usepackage{ctex}
+%\usepackage{algorithmic}
+\usepackage{algpseudocode}
+\usepackage{graphics}
+\usepackage{epsfig}
+\usepackage{setspace}
+\setstretch{1}
+%\usepackage{ramacros}
+
+\addtolength{\textwidth}{20mm}
+\addtolength{\oddsidemargin}{-10mm}
+\addtolength{\textheight}{18mm}
+\addtolength{\topmargin}{-9mm}
+
+
+\newcounter{exercise}
+\setcounter{exercise}{0}
+\newcommand{\exercise}{
+        \addtocounter{exercise}{1}
+        \vspace{0.2in}
+        \noindent
+        {\bf \theexercise .}
+        }
+
+\newcommand{\REMARK}[1]{}
+
+
+\newcommand{\NEWPART}{\vspace{.1in}
+              \noindent}
+
+\newcommand{\<}{
+    \langle}
+
+\renewcommand{\>}{
+    \rangle}
+
+\newcommand{\ceil}[1]{\left\lceil #1 \right\rceil}
+
+\pagestyle{plain} \pagenumbering{arabic}
+
+\title{{\bf Assignment 2} \\ {\large Deadline: Apr. 6}}
+
+\author{125033910296 李博洋}
+\date{}
+
+\begin{document}
+\maketitle
+
+
+{\large
+
+
+\begin{exercise}
+You are given $k$ identical eggs and an $n$ story building. You need to figure out the highest
+floor $l \in {0, 1, 2, \cdots, n}$ that you can drop an egg from without breaking it. Each egg will
+never break when dropped from floor $l$ or lower, and always breaks if dropped from floor
+$l + 1$ or higher. ($l = $0 means the egg always breaks). Once an egg breaks, you cannot use it
+any more. However, if an egg does not break, you can reuse it.
+
+Let $f(n, k)$ be the minimum number of egg drops that are needed to find $l$ (regardless of
+the value of $l$).
+\end{exercise}
+\\\\
+\noindent\textbf{Solution:}
+通过动态规划求解。还剩$j$个鸡蛋，在第$i$层楼扔鸡蛋，有以下两种情况：
+\begin{itemize}
+    \item 鸡蛋碎了，还剩$j-1$个鸡蛋，则需要从第$i-1$层楼开始扔鸡蛋，直到找到最高楼层。
+    \item 鸡蛋没碎，还剩$j$个鸡蛋，则需要从第$i+1$层楼开始扔鸡蛋，直到找到最高楼层。
+\end{itemize}
+最坏情况取两者最大值，再枚举所有可以扔鸡蛋的楼层$x$取最小值，因此，有状态转移方程：
+\begin{equation*}
+f(i, j) = \min_{1\leq x\leq i}\Bigl(1 + \max\bigl(f(x-1, j-1), f(i-x, j)\bigr)\Bigr) \\
+\end{equation*}
+\noindent 注意，此处$i-x$的原因是需要检测的范围是$x+1$层楼到$i$层楼，因此需要检测的楼的数量是$i-x$层楼。
+
+\noindent 同时，有边界条件：
+\begin{gather*}
+f(i, 1) = n, \\
+\text{当只有一个鸡蛋时，只能逐层扔鸡蛋，直到找到最高楼层。} \\
+f(n, j) = \lceil\log_2(n+1)\rceil, \quad j \geq \log_2(n+1). \\
+\text{当鸡蛋数大于 $\log_2(n+1)$ 时，使用二分法最多需要 $\lceil\log_2(n+1)\rceil$ 次扔鸡蛋即可找到最高楼层。}
+\end{gather*}
+最终，$f(n, k)$即为所求。
+
+
+\begin{exercise}
+Design an efficient algorithm to work out the minimum number of characters to be deleted to make string a palindrome.
+\end{exercise}
+\\\\
+\noindent\textbf{Solution:}
+该问题可以转换为：对于字符串$s$，求出最长的回文子序列的长度，然后删除剩余的字符即可。
+
+定义$f(i, j)$为字符串$s[i:j]$的最长回文子序列的长度，则有状态转移方程：
+\begin{equation*}
+f(i, j) = \begin{cases}
+f(i-1, j-1) + 2 & \text{if } s[i] = s[j] \\
+\max(f(i-1, j), f(i, j-1)) & \text{if } s[i] \neq s[j] \\
+\end{cases}
+\end{equation*}
+
+\noindent 同时，有边界条件：
+\begin{gather*}
+    f(i, j) = 1, \quad i = j \\
+\end{gather*}
+
+从边界条件开始，逐步计算$f(i, j)$，最终$f(0, n-1)$即为所求（$s$的长度为$n$）。时间复杂度为$O(n^2)$。
+
+\begin{exercise}
+There are $d$ dice each having $f$ faces. Find the number of ways in which we can get sum $s$ from the faces when the dice are rolled.
+\end{exercise}
+\\\\
+\noindent\textbf{Solution:}
+定义$f(i, j)$为掷出$i$个骰子，掷出$j$的方案数，则有状态转移方程：
+\begin{equation*}
+    f(i, j) = \sum_{k=1}^{f} f(i-1, j-k)
+\end{equation*}
+
+\noindent 同时，有边界条件：
+\begin{gather*}
+    f(1, j) = 1, \quad j \leq f \\
+    f(i, j) = 0, \quad j < d \text{ or } j > d*f 
+\end{gather*}
+从边界条件开始，逐步计算$f(i, j)$，最终$f(d, s)$即为所求。时间复杂度为$O(d*s*f)$。
+
+
+\begin{exercise}
+Consider the following \textbf{3-partition problem}. Given integers $a_1,\ldots,a_n$, we want to determine whether it is possible to partition of $\{1,\ldots, n\}$ into three disjoint subsets $I$, $J$, $K$ such that
+$$\sum_{i\in I} a_i =\sum_{j\in J} a_j= \sum_{k\in K} a_k =\frac{1}{3} \sum_{i=1}^n a_i$$
+Devise and analyze an algorithm for 3-partition that runs in time polynomial in $n$ and in $\sum_i a_i$.
+\end{exercise}
+
+\begin{exercise}
+Given an unlimited supply of coins of denominations $x_1, x_2,\dots x_n$, we wish to make change for
+a value $v$ using at most $k$ coins; that is, we wish to find a set of $\leq k$ coins whose total value is $v$.
+This might not be possible: for instance, if the denominations are $5$ and $10$ and $k = 6$, then we
+can make change for 55 but not for 65. Give an efficient dynamicprogramming algorithm for the
+following problem.
+\begin{description}
+\item[Input] $x_1,\ldots, x_n; k; v$.
+\item[Question] Is it possible to make change for $v$ using at most $k$ coins, of denominations
+$x_1,\ldots, x_n$?
+\end{description}
+\end{exercise}
+
+\begin{exercise}
+    Given a non-empty array $n$ containing only positive integers, find if the array can be \textbf{partitioned} into two subsets such that the sum of elements in both subsets is equal.
+
+    For example, given $n$ = [1, 5, 5, 11], The array can be partitioned as [1, 5, 5] and [11].
+\end{exercise}
+
+
+\end{document}
