@@ -139,6 +139,22 @@ Consider the following \textbf{3-partition problem}. Given integers $a_1,\ldots,
 $$\sum_{i\in I} a_i =\sum_{j\in J} a_j= \sum_{k\in K} a_k =\frac{1}{3} \sum_{i=1}^n a_i$$
 Devise and analyze an algorithm for 3-partition that runs in time polynomial in $n$ and in $\sum_i a_i$.
 \end{exercise}
+\\\\
+\noindent\textbf{Solution:}
+    定义函数$f(i, j, k)$，$f(i, j, k)=true$ 表示从前i个元素中可以选取元素组成两个分离的子集，
+使得其中一个子集元素和为$j$，另一个子集元素和为$k$，则有状态转移方程：
+\begin{equation*}
+    f(i, j, k) = f(i-1, j, k) \text{ or } f(i-1, j-a_i, k) \text{ or } f(i-1, j, k-a_i)
+\end{equation*}
+
+\noindent 同时，有边界条件：
+\begin{gather*}
+    f(i, 0, 0) = true, \quad f(0, j, k) = false, \quad f(0, 0, 0) = true
+\end{gather*}
+
+记$S = \sum_{i=1}^n a_i$，则最终答案为$f(n, S/3, S/3)$。时间复杂度为$O(n*S^2)$。
+
+
 
 \begin{exercise}
 Given an unlimited supply of coins of denominations $x_1, x_2,\dots x_n$, we wish to make change for
@@ -152,12 +168,34 @@ following problem.
 $x_1,\ldots, x_n$?
 \end{description}
 \end{exercise}
+\\\\
+\noindent\textbf{Solution:}
+定义函数$f(k, v)$，$f(k, v$，$f(k, v)$，$f(k, v)=true$表示可以使用至多$k$个硬币组成价值为$v$的方案，则有状态转移方程：
+\begin{equation*}
+    f(i, j) = f(i-1, j-x_1) \text{ or } f(i-1, j-x_2) \text{ or } \cdots \text{ or } f(i-1, j-x_n)
+\end{equation*}
+\noindent 同时，有边界条件：
+\begin{gather*}
+    f(i, 0) = true, \quad f(0, v) = false, \quad v > 0, 且f(i, v) = false, \quad v < 0
+\end{gather*}
+最终答案为$f(k, v)$。时间复杂度为$O(n*k*v)$。
+
 
 \begin{exercise}
     Given a non-empty array $n$ containing only positive integers, find if the array can be \textbf{partitioned} into two subsets such that the sum of elements in both subsets is equal.
 
     For example, given $n$ = [1, 5, 5, 11], The array can be partitioned as [1, 5, 5] and [11].
 \end{exercise}
-
-
+\\\\
+\noindent\textbf{Solution:}
+记$S = \sum_{i=1}^n a_i$，则问题等价于是否可以找到两个子集，使得两个子集的元素和均为$S/2$。
+定义函数$f(i, j)$，$f(i, j)=true$ 表示从前$i$个元素中可以选取元素组成一个子集，使得子集的元素和为$j$，则有状态转移方程：
+\begin{equation*}
+    f(i, j) = f(i-1, j-a_i) \text{ or } f(i-1, j)
+\end{equation*}
+\noindent 同时，有边界条件：
+\begin{gather*}
+    f(0, j) = false, \quad f(i, 0) = ture, f(i, j) = false, \quad j < 0 \text{ 或 } i < 0
+\end{gather*}
+最终答案为$f(n, S/2)$。
 \end{document}
