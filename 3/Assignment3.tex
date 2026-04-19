@@ -1,0 +1,283 @@
+\documentclass{article}
+\usepackage{times}
+\usepackage{a4wide}
+\usepackage{latexsym}
+\usepackage{mathrsfs}
+\usepackage{amsmath}
+\usepackage{amssymb}
+\usepackage{amsthm}
+\usepackage{ifthen}
+\usepackage{stmaryrd}
+\usepackage{algorithm}
+\usepackage{ctex}
+%\usepackage{algorithmic}
+\usepackage{algpseudocode}
+\usepackage{graphics}
+\usepackage{epsfig}
+\usepackage{setspace}
+\setstretch{1}
+%\usepackage{ramacros}
+
+\addtolength{\textwidth}{20mm}
+\addtolength{\oddsidemargin}{-10mm}
+\addtolength{\textheight}{18mm}
+\addtolength{\topmargin}{-9mm}
+
+
+\newcounter{exercise}
+\setcounter{exercise}{0}
+\newcommand{\exercise}{
+        \addtocounter{exercise}{1}
+        \vspace{0.2in}
+        \noindent
+        {\bf \theexercise .}
+        }
+
+\newcommand{\REMARK}[1]{}
+
+
+\newcommand{\NEWPART}{\vspace{.1in}
+              \noindent}
+
+\newcommand{\<}{
+    \langle}
+
+\renewcommand{\>}{
+    \rangle}
+
+\newcommand{\ceil}[1]{\left\lceil #1 \right\rceil}
+
+\pagestyle{plain} \pagenumbering{arabic}
+
+\title{{\bf Assignment 3} \\ {\large Deadline: Apr. 19}}
+
+\author{125033910296 李博洋}
+\date{}
+
+\begin{document}
+\maketitle
+
+%{\large \noindent
+%\begin{tabular}{lcl}
+%{Jan 17 2007}.
+%\end{tabular}
+%}
+
+{\large
+
+\begin{exercise}
+Prove the K\"onig theorem: Let $G$ be bipartite, then cardinality of maximum matching = cardinality of minimum vertex cover.
+\end{exercise}
+\\\\
+\noindent\textbf{Solution:}
+\newcommand{\card}[1]{\left|#1\right|} % 基数符号
+\newcommand{\nuG}{\nu(G)} % 最大匹配基数
+\newcommand{\tauG}{\tau(G)} % 最小顶点覆盖基数
+\begin{proof}
+设二分图 $G=(V,E)$，其顶点集 $V$ 可划分为两个互不相交的子集 $X$ 和 $Y$（二分划），满足所有边 $e\in E$ 都连接 $X$ 中的一个顶点和 $Y$ 中的一个顶点。
+
+通过证明两个方向的不等式来完成定理的证明：
+\[
+\nuG \leq \tauG \quad \text{且} \quad \tauG \leq \nuG
+\]
+
+\paragraph{第一步：证明 $\nuG \leq \tauG$}
+\\
+
+设 $M$ 是 $G$ 的任意一个匹配，$C$ 是 $G$ 的任意一个顶点覆盖。
+由于 $M$ 中的边两两无公共顶点，要覆盖这 $\card{M}$ 条边，$C$ 中至少需要 $\card{M}$ 个不同的顶点（每个顶点最多覆盖 $M$ 中的一条边）。
+
+因此对所有匹配 $M$ 和顶点覆盖 $C$，都有 $\card{M} \leq \card{C}$。
+取等号的极端情况可得：
+\[
+\nuG \leq \tauG
+\]
+
+\paragraph{第二步：证明 $\tauG \leq \nuG$}
+\\
+
+通过构造一个基数等于最大匹配基数的顶点覆盖来证明。设 $M$ 是二分图 $G$ 的一个最大匹配。
+\begin{enumerate}
+    \item 定义集合 $Z$：从 $X$ 中所有未被 $M$ 匹配的顶点出发，沿着交替路径（边交替属于 $M$ 和不属于 $M$ 的路径）能够到达的所有顶点的集合。
+    \item 构造顶点覆盖：$C = (X \setminus Z) \cup (Y \cap Z)$。
+\end{enumerate}
+
+\subparagraph{验证 $C$ 是顶点覆盖}
+假设存在一条边 $e=(u,v)$（$u\in X, v\in Y$），其两个端点都不在 $C$ 中，则：
+\[
+u \in X \cap Z \quad \text{且} \quad v \in Y \setminus Z
+\]
+
+我们分两种情况讨论边 $e$ 是否属于 $M$：
+\begin{enumerate}
+    \item 若 $e \notin M$：由于 $u \in Z$，说明存在从 $X$ 中未匹配顶点到 $u$ 的交替路径。在这条路径末尾添加边 $e$，就得到了到 $v$ 的交替路径，因此 $v \in Z$，与 $v \in Y \setminus Z$ 矛盾。
+    \item 若 $e \in M$：由于 $u \in Z$，说明存在到 $u$ 的交替路径。因为 $e$ 是匹配边，到达 $u$ 的路径的最后一条边一定不是匹配边（否则路径会提前终止于 $v$）。在这条路径末尾添加匹配边 $e$，就得到了到 $v$ 的交替路径，因此 $v \in Z$，同样与 $v \in Y \setminus Z$ 矛盾。
+\end{enumerate}
+
+两种情况均矛盾，故不存在这样的边 $e$，即 $C$ 是 $G$ 的一个顶点覆盖。
+
+\subparagraph{验证 $\card{C} = \card{M}$}
+我们通过分析匹配边与集合 $Z$ 的关系来计算 $\card{C}$：
+\begin{enumerate}
+    \item $Y \cap Z$ 中的所有顶点都被 $M$ 匹配：若存在 $v \in Y \cap Z$ 未被匹配，则到达 $v$ 的交替路径是一条增广路径（起点是 $X$ 中未匹配顶点，终点是 $Y$ 中未匹配顶点），这与 $M$ 是最大匹配矛盾。
+    \item $X \setminus Z$ 中的所有顶点都被 $M$ 匹配：若存在 $u \in X \setminus Z$ 未被匹配，则 $u$ 本身属于 $Z$（$Z$ 包含所有 $X$ 中未匹配顶点），与 $u \in X \setminus Z$ 矛盾。
+    \item 匹配边在 $Z$ 内外的一一对应：
+    \begin{itemize}
+        \item 对于连接 $X \cap Z$ 和 $Y \cap Z$ 的匹配边：$X \cap Z$ 中被匹配的顶点与 $Y \cap Z$ 中被匹配的顶点一一对应，数量相等，记为 $k_1$。
+        \item 对于连接 $X \setminus Z$ 和 $Y \setminus Z$ 的匹配边：$X \setminus Z$ 中所有顶点都被匹配，且其匹配点都在 $Y \setminus Z$ 中（否则匹配点在 $Y \cap Z$ 会导致该顶点属于 $X \cap Z$），数量为 $k_2 = \card{X \setminus Z}$。
+    \end{itemize}
+\end{enumerate}
+
+因此，最大匹配的基数 $\card{M} = k_1 + k_2$。
+而顶点覆盖的基数：
+\[
+\card{C} = \card{X \setminus Z} + \card{Y \cap Z} = k_2 + k_1
+\]
+
+故 $\card{C} = \card{M}$。这说明存在一个顶点覆盖 $C$，其基数等于最大匹配的基数，因此：
+\[
+\tauG \leq \nuG
+\]
+
+结合两个方向的不等式，我们得到：
+\[
+\nuG = \tauG
+\]
+\end{proof}
+
+\begin{exercise}
+Consider the following problem. You are given a flow network with unitcapacity
+edges: It consists of a directed graph $G = (V, E)$, a source $s \in V$,
+and a sink $t\in V;$ and $c_e = 1$ for every $e\in E$. You are also given a parameter $k$.
+The goal is to delete $k$ edges so as to reduce the maximum $s$-$t$ flow in
+$G$ by as much as possible. In other words, you should find a set of edges
+$F \subseteq E$ so that $|F| = k$ and the maximum $s$-$t$ flow in $G' = (V, E-F)$ is as small
+as possible subject to this.
+
+Give a polynomial-time algorithm to solve this problem.
+\end{exercise}
+\\\\
+\noindent\textbf{Solution:}
+使用最大流算法（如Dinic算法）计算原图的最大s-t流$f$。
+在最大流计算完成后，通过在残留网络中从s出发进行BFS，找到所有可达节点构成集合S，剩余节点构成集合T。
+由于$G$是一个单位容量网络，因此从S指向T的所有边即为一个最小s-t割$C$，满足$|C| = f$。
+
+此时，从最小s-t割$C$中删除$k$条边：
+若$k \leq |C|$，选取任意$k$条边构成删除集$F$；
+若$k > |C|$，选取$C$中所有$|C|$条边构成$F$（剩余$k - |C|$条边可任意选取，不影响结果）。
+
+新图$G' = (V, E - F)$的最大s-t流即为\max(0, $|C| - k$)。
+
+\begin{exercise}
+ Find the minimum-cost flow subject to the constraint that the flow value is at
+least 90\% of the maximum flow value.
+\end{exercise}
+\\\\
+\noindent\textbf{Solution:}
+\\
+\noindent\textbf{步骤1：计算原图最大流量与流量下限}
+\begin{enumerate}
+    \item 使用任意最大流算法计算从$s$到$t$的最大流量$F_{\text{max}}$
+    \item 计算流量下限：$F_{\text{min}}=0.9\times F_{\text{max}}$
+    \item 计算允许的最大退流量：$\Delta_{\text{max}}=F_{\text{max}}-F_{\text{min}}$（最多可将流量从$F_{\text{max}}$减少多少）
+\end{enumerate}
+
+\noindent\textbf{步骤2：计算原图的最小费用最大流} \\
+使用任意最小费用最大流算法（如连续最短路算法、原始-对偶算法）计算从$s$到$t$的最小费用最大流，得到：
+\begin{itemize}
+    \item 流量值$f=F_{\text{max}}$
+    \item 总费用$C=C(F_{\text{max}})$
+    \item 对应的残量网络$G_f$（包含正向边和反向边，反向边容量为已发送流量，单位费用为原边费用的相反数）
+\end{itemize}
+
+\noindent\textbf{步骤3：逐步退流优化总费用}\\
+在残量网络中，每次选择\textbf{单位退流费用最小}的路径（即从汇点$t$到源点$s$的最短路径）退流，直到无法再降低总费用或达到流量下限。
+
+初始化已退流量$\Delta=0$，循环执行：
+\begin{enumerate}
+    \item 在残量网络$G_f$中找到从$t$到$s$的最短路径$P$（单位费用之和最小）
+    \item 若路径$P$的费用$\text{cost}(P)\geq0$：退流会增加总费用，此时总费用已达最小值，停止
+    \item 计算路径$P$的最大可退流量$\Delta_p$：路径上所有边残量容量的最小值
+    \item 计算本次实际退流量：$\Delta_{\text{actual}}=\min(\Delta_p, \Delta_{\text{max}}-\Delta)$（不能超过允许的最大退流量）
+    \item 沿着路径$P$推送$\Delta_{\text{actual}}$个单位流量：
+    \begin{itemize}
+        \item 更新残量网络中各边的残量容量
+        \item 总费用$C += \Delta_{\text{actual}}\times\text{cost}(P)$
+        \item 总流量$f -= \Delta_{\text{actual}}$
+        \item 已退流量$\Delta += \Delta_{\text{actual}}$
+    \end{itemize}
+    \item 若$\Delta\geq\Delta_{\text{max}}$：已达到流量下限$F_{\text{min}}$，不能再退流，停止
+\end{enumerate}
+
+\noindent\textbf{步骤4：输出结果}
+最终得到的流$f$即为满足$|f|\geq 0.9\times F_{\text{max}}$的最小费用流，总费用为$C$。
+
+\begin{exercise}
+Given a directed network $G=(V,E)$ with the capacity $c(e)$ on each edge $e$. Associated with each node $v\in V$ is a demand $d_v$. If $d_v>0$, this indicates that the node $v$ has a demand of $d_v$ for flow; If $d_v<0$, this indicates that $v$ has a supply of $-d_v$. All capacities and demands are integers.
+A circulation is a function $f$ that assigns a nonnegative real number to each edge and satisfies the following two conditions.
+\begin{itemize}
+\item[(i)]  (\textbf{Capacity conditions}) For each $e\in E$, we have $0\leq f(e)\leq c(e)$.
+\item[(ii)]  (\textbf{Demand conditions}) For each $v\in V$, we have $f^{in}(v)-f^{out}(v)=d_v$.
+\end{itemize}
+Work out an algorithm to decide whether there exists a circulation that meets conditions (i) and (ii).
+\end{exercise}
+\\\\
+\noindent\textbf{Solution:}
+\\
+\noindent\textbf{算法：转化为最大流问题}\\
+首先判断，若$\sum_{v\in V} d_v \neq 0$，则不存在环流，否则将环流问题转化为源点-汇点的最大流问题，步骤如下：
+
+\noindent\textbf{构造辅助图 \( G'=(V', E') \)}
+\begin{enumerate}
+    \item 新增源点 \( s \) 和汇点 \( t \)，令 \( V' = V \cup \{s, t\} \)；
+    \item 保留原图所有边 \( e \in E \)，容量仍为 \( c(e) \)，即 \( E' \supseteq E \)；
+    \item 对每个节点 \( v \in V \)：
+        \begin{itemize}
+            \item 若 \( d_v > 0 \)（需求节点）：添加边 \( (s, v) \) 到 \( E' \)，容量 \( c(s, v) = d_v \)；
+            \item 若 \( d_v < 0 \)（供应节点）：添加边 \( (v, t) \) 到 \( E' \)，容量 \( c(v, t) = -d_v \)。
+        \end{itemize}
+\end{enumerate}
+
+\noindent\textbf{计算最大流并判断}\\
+定义总需求 \( D = \sum_{\substack{v \in V \\ d_v > 0}} d_v \)。在 \( G' \) 中计算从 \( s \) 到 \( t \) 的最大流 \( |f_{\text{max}}| \)：
+\begin{enumerate}
+    \item 若 \( |f_{\text{max}}| = D \)，则原图 \( G \) 存在满足条件的环流；
+    \item 否则，不存在这样的环流。
+\end{enumerate}
+
+\begin{exercise}
+Suppose that, in addition to edge capacities, a flow network has \textbf{vertex capacities}.
+That is each vertex has a limit on how much flow can pass though. Show how to transform a flow network $G=(V,E)$ with vertex capacities into an equivalent flow network $G'=(V',E')$ without vertex capacities, such that a maximum flow in $G'$ has the same value as a maximum flow in $G$. How many vertices and edges does $G'$ have?
+\end{exercise}
+
+\begin{exercise}
+SJTU is visited by prospective student groups. Let SJTU campus be modeled
+as a weighted, directed graph $G$ containing locations $V$ connected by one-way
+roads $E$. On a busy day, let $k$ be the number of campus tours that have to be
+done at the same time. It is required that the paths of campus tours do not
+use the same roads. Let the tour have $k$ starting locations $A = { a_1, a_2,..., a_k
+} \in V$ . From the starting locations the groups are taken by a guide on a path
+through $G$ to some ending location in $B =\{ b_1, b_2,..., b_k\} \in V$ . Your goal is
+to find a path for each group $i$ from the starting location, $a_i$
+, to any ending
+location $b_j$ such that no two paths share any edges, and no two groups end in
+the same location $b_j$ .
+
+
+\begin{itemize}
+\item Design an algorithm to find $k$ paths $a_i \rightarrow^* b_j$ that start and end at different
+vertices and such that they do not share any edges.
+
+
+\item Modify your algorithm to find $k$ paths $a_i \rightarrow^* b_j$ , that start and end in different
+locations and such that they share neither vertices nor edges.
+
+\end{itemize}
+
+
+\end{exercise}
+
+
+}
+
+\end{document}

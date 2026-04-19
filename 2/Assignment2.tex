@@ -170,7 +170,7 @@ $x_1,\ldots, x_n$?
 \end{exercise}
 \\\\
 \noindent\textbf{Solution:}
-定义函数$f(k, v)$，$f(k, v$，$f(k, v)$，$f(k, v)=true$表示可以使用至多$k$个硬币组成价值为$v$的方案，则有状态转移方程：
+定义函数$f(k, v)$，$f(k, v)=true$表示可以使用至多$k$个硬币组成价值为$v$的方案，则有状态转移方程：
 \begin{equation*}
     f(i, j) = f(i-1, j-x_1) \text{ or } f(i-1, j-x_2) \text{ or } \cdots \text{ or } f(i-1, j-x_n)
 \end{equation*}
