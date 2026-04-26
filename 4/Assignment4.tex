@@ -1,0 +1,346 @@
+\documentclass{article}
+\usepackage{times}
+\usepackage{a4wide}
+\usepackage{latexsym}
+\usepackage{mathrsfs}
+\usepackage{amsmath}
+\usepackage{amssymb}
+\usepackage{amsthm}
+\usepackage{ifthen}
+\usepackage{stmaryrd}
+\usepackage{algorithm}
+\usepackage{ctex}
+%\usepackage{algorithmic}
+\usepackage{algpseudocode}
+\usepackage{graphics}
+\usepackage{epsfig}
+\usepackage{setspace}
+\setstretch{1}
+%\usepackage{ramacros}
+
+\addtolength{\textwidth}{20mm}
+\addtolength{\oddsidemargin}{-10mm}
+\addtolength{\textheight}{18mm}
+\addtolength{\topmargin}{-9mm}
+
+
+\newcounter{exercise}
+\setcounter{exercise}{0}
+\newcommand{\exercise}{
+        \addtocounter{exercise}{1}
+        \vspace{0.2in}
+        \noindent
+        {\bf \theexercise .}
+        }
+
+\newcommand{\REMARK}[1]{}
+
+
+\newcommand{\NEWPART}{\vspace{.1in}
+              \noindent}
+
+\newcommand{\<}{
+    \langle}
+
+\renewcommand{\>}{
+    \rangle}
+
+\newcommand{\ceil}[1]{\left\lceil #1 \right\rceil}
+
+\pagestyle{plain} \pagenumbering{arabic}
+
+\title{{\bf Assignment 4} \\ {\large Deadline: May 5}}
+
+\author{125033910296 李博洋}
+\date{}
+
+\begin{document}
+\maketitle
+
+%{\large \noindent
+%\begin{tabular}{lcl}
+%{Jan 17 2007}.
+%\end{tabular}
+%}
+
+{\large
+
+\begin{exercise}
+	Prove the complementary slackness property of linear programs.
+\end{exercise}
+\\\\
+\noindent\textbf{Solution:}
+\\
+\textbf{原问题与对偶问题}\\
+给定原线性规划（最大化）：
+\[
+\text{(P)}\quad
+\begin{cases}
+\max\; \boldsymbol{c}^\mathrm{T}\boldsymbol{x} \\[4pt]
+\text{s.t.}\; A\boldsymbol{x} \le \boldsymbol{b},\\[4pt]
+\boldsymbol{x} \ge \boldsymbol{0}.
+\end{cases}
+\]
+其对偶规划（最小化）：
+\[
+\text{(D)}\quad
+\begin{cases}
+\min\; \boldsymbol{b}^\mathrm{T}\boldsymbol{y} \\[4pt]
+\text{s.t.}\; A^\mathrm{T}\boldsymbol{y} \ge \boldsymbol{c},\\[4pt]
+\boldsymbol{y} \ge \boldsymbol{0}.
+\end{cases}
+\]
+
+\noindent\textbf{互补松弛性定理}\\
+设 $\boldsymbol{x}$ 为原问题可行解，$\boldsymbol{y}$ 为对偶问题可行解。
+则 $\boldsymbol{x}$ 为原问题最优解、$\boldsymbol{y}$ 为对偶问题最优解
+\iff 满足互补松弛条件：
+\[
+\boldsymbol{y}^\mathrm{T}\big(\boldsymbol{b}-A\boldsymbol{x}\big) = 0,\quad
+\boldsymbol{x}^\mathrm{T}\big(A^\mathrm{T}\boldsymbol{y}-\boldsymbol{c}\big) = 0.
+\]
+
+\noindent\textbf{预备：弱对偶定理}\\
+对任意原可行解 $\boldsymbol{x}$ 与对偶可行解 $\boldsymbol{y}$，必有：
+\[
+\boldsymbol{c}^\mathrm{T}\boldsymbol{x}
+\le \boldsymbol{y}^\mathrm{T}A\boldsymbol{x}
+\le \boldsymbol{b}^\mathrm{T}\boldsymbol{y}.
+\]
+\begin{proof}
+由 $A^\mathrm{T}\boldsymbol{y}\ge \boldsymbol{c},\boldsymbol{x}\ge\boldsymbol 0$，左乘 $\boldsymbol{x}^\mathrm{T}$ 得
+$\boldsymbol{c}^\mathrm{T}\boldsymbol{x} \le \boldsymbol{x}^\mathrm{T}A^\mathrm{T}\boldsymbol{y}$；
+由 $A\boldsymbol{x}\le \boldsymbol{b},\boldsymbol{y}\ge\boldsymbol 0$，左乘 $\boldsymbol{y}^\mathrm{T}$ 得
+$\boldsymbol{y}^\mathrm{T}A\boldsymbol{x} \le \boldsymbol{b}^\mathrm{T}\boldsymbol{y}$。
+结合即证。
+\end{proof}
+
+\noindent\textbf{互补松弛性定理证明}\\
+\textbf{必要性：最优解 $\Rightarrow$ 互补松弛}\\
+设 $\boldsymbol{x}^*$ 为原最优解，$\boldsymbol{y}^*$ 为对偶最优解。
+由\textbf{强对偶定理}，原对偶最优目标值相等：
+\[
+\boldsymbol{c}^\mathrm{T}\boldsymbol{x}^*
+= \boldsymbol{b}^\mathrm{T}\boldsymbol{y}^*.
+\]
+结合弱对偶不等式：
+\[
+\boldsymbol{c}^\mathrm{T}\boldsymbol{x}^*
+=\boldsymbol{y}^{*\mathrm{T}}A\boldsymbol{x}^*
+=\boldsymbol{b}^\mathrm{T}\boldsymbol{y}^*.
+\]
+
+\begin{enumerate}
+\item 由 $\boldsymbol{y}^{*\mathrm{T}}A\boldsymbol{x}^* = \boldsymbol{b}^\mathrm{T}\boldsymbol{y}^*$，移项：
+\[
+\boldsymbol{y}^{*\mathrm{T}}\big(\boldsymbol{b}-A\boldsymbol{x}^*\big)=0.
+\]
+\item 由 $\boldsymbol{c}^\mathrm{T}\boldsymbol{x}^* = \boldsymbol{y}^{*\mathrm{T}}A\boldsymbol{x}^*$，转置移项：
+\[
+\boldsymbol{x}^{*\mathrm{T}}\big(A^\mathrm{T}\boldsymbol{y}^*-\boldsymbol{c}\big)=0.
+\]
+\end{enumerate}
+$(\boldsymbol{x}^*,\boldsymbol{y}^*)$ 满足互补松弛，必要性得证。
+
+\noindent\textbf{充分性：可行+互补松弛 $\Rightarrow$ 最优解}\\
+已知：
+$\boldsymbol{x}$ 原可行，$\boldsymbol{y}$ 对偶可行，且
+\[
+\boldsymbol{y}^\mathrm{T}(\boldsymbol{b}-A\boldsymbol{x})=0,\quad
+\boldsymbol{x}^\mathrm{T}(A^\mathrm{T}\boldsymbol{y}-\boldsymbol{c})=0.
+\]
+
+展开条件：
+\[
+\boldsymbol{y}^\mathrm{T}\boldsymbol{b} = \boldsymbol{y}^\mathrm{T}A\boldsymbol{x},\quad
+\boldsymbol{c}^\mathrm{T}\boldsymbol{x} = \boldsymbol{x}^\mathrm{T}A^\mathrm{T}\boldsymbol{y}.
+\]
+因此：
+\[
+\boldsymbol{c}^\mathrm{T}\boldsymbol{x}
+=\boldsymbol{y}^\mathrm{T}A\boldsymbol{x}
+=\boldsymbol{b}^\mathrm{T}\boldsymbol{y}.
+\]
+
+原可行解与对偶可行解目标函数值相等，
+由线性规划最优判定准则：$\boldsymbol{x}$ 为原最优解，$\boldsymbol{y}$ 为对偶最优解。
+充分性得证。
+
+
+\begin{exercise}
+	Transform following problems into linear programming
+	
+	(1)
+		$$\begin{aligned}
+		&\text { maximize } & 5x+2y\\
+		&\text { subject to } & 0 \le x \le 20 \\
+		& & |x - y|\le 5
+		\end{aligned}$$
+		
+	(2)
+		$$\begin{aligned}
+		&\text { maximize }  & min(x1,x2,x3)\\
+		&\text { subject to }  & x1+x2+x3 = 15
+		\end{aligned}$$
+\end{exercise}
+\\\\
+\noindent\textbf{Solution:}
+\\
+(1) 拆开绝对值不等式
+$$\begin{aligned}
+&\text { maximize } & 5x+2y &\\
+&\text { subject to } & 0 \le x \le 20 &\\
+& & x - y \le 5 & \rightarrow x \le y + 5 &\\
+& & -5 \le x - y & \rightarrow y + 5 - 10 \le x
+\end{aligned}$$
+令 $z = y + 5$，则有
+$$\begin{aligned}
+&\text { maximize } & 5x+2z &\\
+&\text { subject to } & x \le 20 &\\
+& & x - z\le 0 &\\
+& & z - x \le 10 &\\
+& & x \ge 0, z \ge 0
+\end{aligned}$$
+\\
+(2) 选择$x_1$作为最小值，则有
+$$\begin{aligned}
+&\text { maximize } & x_1 &\\
+&\text { subject to } & x_1 + x_2 + x_3 = 15 &\\
+& & x_1 \le x_2 & \rightarrow x_1 - x_2 \le 0 &\\
+& & x_1 \le x_3 & \rightarrow x_1 - x_3 \le 0
+\end{aligned}$$
+
+
+\begin{exercise}
+	Given a graph $G$, each vertex $v_i$ has a profit $p_i$ and each edge $e_{ij}$ has a cost $c_{ij}$. Define the profit of a cycle is the total profits of all the vertices in the cycle, and the cost of a cycle is the total costs of all the edges in the cycle. We need to find a simple cycle in $G$ which contains a given vertex $v_0$, and maximize the profit of it within the cost bound $B$. Write the linear programming formulation of this problem.
+\end{exercise}
+\\\\
+\noindent\textbf{Solution:}
+\\
+\textbf{目标函数（最大化圈总收益）：}
+\[
+\text { maximize } \quad Z = \sum_{i \in V} p_i x_i
+\]
+
+\noindent\textbf{约束条件：}
+\begin{align*}
+x_0 &= 1 \quad &&\text{必须包含指定顶点} \ v_0 \\
+\sum_{j:(i,j) \in E} y_{ij} &= 2x_i, \ \forall i \in V \quad &&\text{圈度数约束，每个被选的点的度数为2} \\
+\sum_{(i,j) \in E} c_{ij} y_{ij} &\le B \quad &&\text{总成本预算约束} \\
+0 \le x_i &\le 1, \ \forall i \in V \quad &&\text{顶点变量范围} \\
+0 \le y_{ij} &\le 1, \ \forall (i,j) \in E \quad &&\text{边变量范围}
+\end{align*}
+
+
+\begin{exercise}
+Spectrum management is the process of regulating the use of radio frequencies
+to promote efficient use and gain a net social benefit. Given a set of broadcast
+emitting stations $s_1, . . . , s_n$, a list of frequencies $f_1, . . . , f_m$, where $m \ge n$, and
+the set of adjacent stations ${(s_i
+, s_j )}$ for some $i, j \in [n]$. The goal is to assign
+a frequency to each station so that adjacent stations use different frequencies
+and the number of used frequencies is minimized. Formulate this problem as an
+integer linear programming problem.
+\end{exercise}
+\\\\
+\noindent\textbf{Solution:}
+\\
+\noindent\textbf{决策变量}\\
+\begin{itemize}
+    \item \( x_{ik} \in \{0,1\} \)：发射台 \( s_i \) 分配频率 \( f_k \) 取1，否则取0，\( i=1,\dots,n,\ k=1,\dots,m \)
+    \item \( y_k \in \{0,1\} \)：频率 \( f_k \) 被使用取1，否则取0，\( k=1,\dots,m \)
+\end{itemize}
+\noindent\textbf{目标函数（最小化使用频率数量）}\\
+\[
+\min \quad \sum_{k=1}^{m} y_k
+\]
+\noindent\textbf{约束条件}\\
+\begin{align*}
+    &\sum_{k=1}^{m} x_{ik} = 1, && \forall i = 1,\dots,n \quad \text{（每个发射台分配唯一频率）} \\
+    &x_{ik} + x_{jk} \leq 1, && \forall (s_i,s_j) \text{（相邻台）},\ \forall k = 1,\dots,m \quad \text{（相邻台频率不同）} \\
+    &x_{ik} \leq y_k, && \forall i=1,\dots,n,\ \forall k=1,\dots,m \quad \text{（频率使用标记约束）} \\
+    &x_{ik}, y_k \in \{0,1\}, && \forall i,k \quad \text{（整数约束）}
+\end{align*}
+
+
+\begin{exercise}
+You have been chosen to assign the new graduate students to office spaces. Office $i$ has $n_i$ available desks, and graduate student
+$g$ is willing to pay you pig dollars for the privilege of being placed in office $i$.
+
+\begin{itemize}
+    \item Show how you can use a min-cost flow algorithm to work out the best beneficial (for you) assignment of new students to offices.
+    \item Argue that you can achieve this best result without forcing grad students to share
+a desk or split their time between multiple rooms.
+    \item Write a concise linear program to solve this problem (assuming it returns an
+integral answer).
+\end{itemize}
+
+\end{exercise}
+\\\\
+\noindent\textbf{Solution:}
+\\
+\textbf{1. 使用最小费用流算法解决最佳分配问题}\\
+将最大收益分配问题转化为\textbf{最小费用流}问题（收益取反为负成本），构建流网络如下：
+\begin{itemize}
+    \item \textbf{节点}：源点 $S$、研究生节点 $G_g$、办公室节点 $O_i$、汇点 $T$。
+    \item \textbf{有向边（容量，单位费用）}：
+    \begin{enumerate}
+        \item $S \to G_g$：容量 $1$，费用 $0$（每个研究生仅分配一次）；
+        \item $G_g \to O_i$：容量 $1$，费用 $-p_{ig}$（最大化收益 $\leftrightarrow$ 最小化负成本）；
+        \item $O_i \to T$：容量 $n_i$，费用 $0$（办公室 $i$ 的工位容量限制）。
+    \end{enumerate}
+    \item 求解\textbf{最小费用最大流}，总流量为研究生总人数；总费用的相反数即为最大收益。
+\end{itemize}
+\textbf{2. 证明无需强制学生共享桌位或分时段使用多个房间}\\
+依据最小费用流的\textbf{整数流性质}：
+所有边的容量均为整数，因此最优流必然是\textbf{整数流}。
+\begin{itemize}
+    \item 边 $S \to G_g$ 容量为 $1$：每个研究生仅分配至\textbf{一个办公室}，无时间拆分；
+    \item 边 $O_i \to T$ 容量为 $n_i$：每个办公室最多容纳 $n_i$ 人，无工位共享。
+\end{itemize}
+\textbf{3. 线性规划问题解决该问题}\\
+定义决策变量：$x_{gi}=1$ 表示研究生 $g$ 分配到办公室 $i$，$x_{gi}=0$ 表示未分配。
+\begin{align*}
+    \max &\sum_{g} \sum_{i} p_{ig} x_{gi} && \\
+    \text{s.t.} &\sum_{i} x_{gi} = 1, &&\forall \text{ 研究生 } g, (\text{每个研究生仅分配至一个办公室})\\
+    &\sum_{g} x_{gi} \leq n_i, &&\forall \text{ 办公室 } i, (\text{每个办公室最多容纳 } n_i \text{ 人})\\
+	&x_{gi} \in \{0,1\} &&\forall g,i. (\text{整数约束})
+\end{align*}
+
+
+
+
+\begin{exercise}
+In a \textsc{Facility Location Problem}, there is a set of facilities and a set of cities, and our job is to choose a subset of facilities to open, and to connect every city to some one of the open facilities. There is a nonnegative cost $f_j$ for opening facility $j$, and a nonnegative connection cost $c_{(i,j)}$  for connecting city $i$ to facility $j$. Given these as input, we look for a solution that minimizes the total cost. Formulate this facility location problem as an integer programming problem.
+\end{exercise}
+\\\\
+\noindent\textbf{Solution:}
+\\
+\noindent\textbf{符号定义}
+\begin{itemize}
+    \item 设施集合：$J = \{1,2,\dots,m\}$，城市集合：$I = \{1,2,\dots,n\}$
+    \item $f_j \geq 0$：开设设施$j$的固定成本
+    \item $c_{ij} \geq 0$：城市$i$连接到设施$j$的连接成本
+    \item 决策变量：
+    \begin{itemize}
+        \item $x_j \in \{0,1\}$：$x_j=1$表示开设设施$j$，否则为0
+        \item $y_{ij} \in \{0,1\}$：$y_{ij}=1$表示城市$i$连接设施$j$，否则为0
+    \end{itemize}
+\end{itemize}
+
+\noindent\textbf{数学模型}\\
+\noindent\textbf{目标函数（最小化总费用）：}
+\[
+\min \quad \sum_{j \in J} f_j x_j + \sum_{i \in I} \sum_{j \in J} c_{ij} y_{ij}
+\]
+
+\noindent\textbf{约束条件：}
+\begin{align*}
+    \sum_{j \in J} y_{ij} &= 1, &&\forall i \in I \quad \text{（每个城市唯一连接）} \\
+    y_{ij} &\leq x_j, &&\forall i \in I, j \in J \quad \text{（仅连接已开设设施）} \\
+    x_j &\in \{0,1\}, &&\forall j \in J \quad \text{（设施0-1变量）} \\
+    y_{ij} &\in \{0,1\}, &&\forall i \in I, j \in J \quad \text{（连接0-1变量）}
+\end{align*}
+
+
+\end{document}
