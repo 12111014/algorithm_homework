@@ -1,0 +1,267 @@
+\documentclass{article}
+\usepackage{times}
+\usepackage{a4wide}
+\usepackage{latexsym}
+\usepackage{mathrsfs}
+\usepackage{amsmath}
+\usepackage{amssymb}
+\usepackage{amsthm}
+\usepackage{ifthen}
+\usepackage{stmaryrd}
+\usepackage{algorithm}
+\usepackage{ctex}
+%\usepackage{algorithmic}
+\usepackage{algpseudocode}
+\usepackage{graphics}
+\usepackage{epsfig}
+\usepackage{setspace}
+\setstretch{1}
+%\usepackage{ramacros}
+
+\addtolength{\textwidth}{20mm}
+\addtolength{\oddsidemargin}{-10mm}
+\addtolength{\textheight}{18mm}
+\addtolength{\topmargin}{-9mm}
+
+
+\newcounter{exercise}
+\setcounter{exercise}{0}
+\newcommand{\exercise}{
+        \addtocounter{exercise}{1}
+        \vspace{0.2in}
+        \noindent
+        {\bf \theexercise .}
+        }
+
+\newcommand{\REMARK}[1]{}
+
+
+\newcommand{\NEWPART}{\vspace{.1in}
+              \noindent}
+
+\newcommand{\<}{
+    \langle}
+
+\renewcommand{\>}{
+    \rangle}
+
+\newcommand{\ceil}[1]{\left\lceil #1 \right\rceil}
+
+\pagestyle{plain} \pagenumbering{arabic}
+
+\title{{\bf Assignment 5} \\ {\large Deadline: May 17}}
+
+\author{125033910296 李博洋}
+\date{}
+
+\begin{document}
+\maketitle
+
+%{\large \noindent
+%\begin{tabular}{lcl}
+%{Jan 17 2007}.
+%\end{tabular}
+%}
+
+{\large
+
+
+%Requirement : To prove a problem is NPC, you should state following factors. (1) The problem is NP. (2) The problem is NPH. (3) If you use reduction to prove (2), you should point out that the reduction procedure is in polynomial-time.
+
+\begin{exercise}
+Show that \textsc{Independent Set Problem} is NP-hard even graphs of maximum degree $3$.
+\end{exercise}
+\\\\
+\noindent\textbf{Solution:}
+\\
+1. 先证明每个变量至多出现 3 次的 3‑SAT 仍是 NP‑完全。
+\begin{proof}
+首先，3‑occurrence 3‑SAT显然属于NP：对任意真值赋值，可在多项式时间内验证所有子句是否成立。
+\\
+接下来将普通3‑SAT多项式时间归约到3‑occurrence 3‑SAT。
+设普通3‑CNF公式为$\phi$。对任意变量$x$，若其在$\phi$中出现$t>3$次，构造如下：
+\begin{enumerate}
+    \item 引入新变量$x_1,x_2,\dots,x_t$；
+    \item 添加循环等价约束子句：
+    \[
+    (\neg x_1\lor x_2),\;(\neg x_2\lor x_3),\;\dots,\;(\neg x_{t-1}\lor x_t),\;(\neg x_t\lor x_1),
+    \]
+    保证$x_1=x_2=\cdots=x_t$；
+    \item 将原公式中第$i$次出现的$x$替换为$x_i$，$\neg x$替换为$\neg x_i$。
+\end{enumerate}
+每个新变量$x_i$最多出现在2个等价约束子句与1个原3‑子句中，故至多出现3次。
+对所有高频变量重复上述操作得到$\phi'$，满足：
+\[
+\phi\text{ 可满足} \iff \phi'\text{ 可满足},
+\]
+且$\phi'$为3‑CNF、每个变量至多出现3次，构造过程为多项式时间。
+由3‑SAT的NP‑完全性，得3‑occurrence 3‑SAT是NP‑完全的。
+\end{proof}
+
+\noindent 2. 再用标准 3SAT 归约到独立集问题的方法，将该受限 3‑SAT 归约到独立集问题，所得图最大度不超过 3（由于每个文字最多出现在三个子句中，每个点最多连接三个不同的点）。
+因此最大度 3 的独立集问题仍然是 NP‑hard。
+
+\begin{exercise}
+In the \textsc{Hitting Set problem}, we are given a family of sets $\{S_1,S_2,\ldots, S_n\}$ and a budget $b$, and we wish to find a set $H$ of size $\leq b$ which intersects every $S_i$, if such an $H$ exists. In other words, we want $H\cap S_i\neq\emptyset$ for all $i$.
+Show that Hitting Set is NP-complete.
+\end{exercise}
+\\\\
+\noindent\textbf{Solution:}
+\begin{enumerate}
+    \item 首先证明Hitting Set问题属于NP。\\
+    只需要验证$H$的大小是否不超过$b$，以及验证$H$与$S_i$的交不为空。时间复杂度$O(HS)$。所以，Hitting set问题为NP问题。
+    \item 然后证明Hitting Set问题属于NP-complete。
+        \begin{enumerate}
+            \item 构建一个图$G$到hitting set的映射：$G$中的每个点对应hitting set中的每个元素，每条边对应一个$S_i$。
+            \item $b$个点的vertex cover对应大小为$b$的hitting set：对于$G$中每一条边，至少有一个端点在$b$个点的vertex cover集合中，所以这个集合与$S_i$的交集不为空，即此集合对应hitting set
+            \item 大小为$b$的hitting set对应$b$个点的vertex cover：任意的$S_i$与hitting set相交不为空，则每条边至少有一个端点被选中，即hitting set集合对应vertex cover
+        \end{enumerate}
+        由此，Hitting Set问题可以归约到Vertex Cover问题，因此Hitting Set问题属于NP-complete。
+\end{enumerate}
+
+\begin{exercise}
+A \textsc{Dominating Set} of a graph $G = (V, E)$ is a subset $D$ of $V$, such that every vertex not in $D$
+is a neighbor of at least one vertex in $D$. Let the Minimum Dominating Set problem be the
+task of determining whether there is a dominating set of size  $\leq k$. Show that the Minimum
+Dominating Set problem is NP-Complete. You may assume that G is connected.
+\end{exercise}
+\\\\
+\noindent\textbf{Solution:}
+\begin{enumerate}
+    \item 首先证明Minimum Dominating Set问题属于NP。\\
+    对于任意给定的候选支配集 $D$（大小 $|D| \leq k$），我们可以在多项式时间内验证其有效性：遍历每个顶点 $v \in V$，若 $v \notin D$，检查其邻居集合中是否至少有一个顶点属于 $D$。该过程的时间复杂度为 $O(|V| + |E|)$，与图的规模成多项式关系，因此最小支配集问题属于NP类。
+    \item 然后证明Minimum Dominating Set问题属于NP-complete。\\
+    对于任意一个顶点覆盖问题的实例 $\Pi = (G, k)$，构造一个最小支配集问题的实例 $\Pi' = (G', k)$，构造方法如下：
+    首先 $G'$ 是 $G$ 的一个复制，接下来对于 $G$ 中的任意一条边 $(u, v)$，在 $G'$ 中添加一个点 $x_{uv}$，并且添加边 $(x_{uv}, u)$ 和 $(x_{uv}, v)$。
+
+    断言：$\Pi$ 的回答是“是”当且仅当 $\Pi'$ 的回答是“是”。
+
+    \medskip
+    \noindent $\Rightarrow$：考虑 $G$ 的一个大小不超过 $k$ 的顶点覆盖 $S$。显然 $S$ 也同样是 $G'$ 的支配集，并且大小不超过 $k$。
+
+    \medskip
+    \noindent $\Leftarrow$：考虑 $G'$ 的一个大小不超过 $k$ 的支配集 $S$。我们将 $S$ 中那些不是 $G$ 中的点，替换为它的任意一个邻居，得到 $S'$（例如，若 $x_{uv} \in S$，则去掉 $x_{uv}$，加入 $u$ 或者 $v$）。由于 $x_{uv}$ 能支配的点，$u$ 和 $v$ 也都能支配，所以 $S'$ 依旧是一个支配集，并且 $S'$ 只包含 $G$ 中的点。现在由于 $G' \setminus G$ 中的点都被 $S'$ 支配了，所以在 $G$ 中，每条边都会被 $S'$ 覆盖。因此 $S'$ 是 $G$ 的一个大小不超过 $k$ 的顶点覆盖。
+
+    \medskip
+    综上，顶点覆盖问题可以多项式时间归约到最小支配集问题。结合第一步的结论，最小支配集问题是NP完全的。
+\end{enumerate}
+
+\begin{exercise}
+A \textsc{not-all-equal assignment} of a formula in 3CNF is an assignment for which every clause
+contains at least 1 true literal and at least 1 false literal.
+
+The problem \textsc{Not-All-Equal 3SAT}:
+
+{\bf Input}: A formula $\phi$ in 3CNF.
+
+{\bf Question}: Does $\phi$ have a not-all-equal assignment?
+
+Prove the \textsc{Not-All-Equal 3SAT} is  NP-complete.
+
+\end{exercise}
+\\\\
+\noindent\textbf{Solution:}
+\begin{enumerate}
+    \item 首先证明Not-All-Equal 3SAT问题属于NP。\\
+    对于任意一个3CNF公式$\phi$的候选真值赋值，我们可以在多项式时间内验证其是否满足NAE-3SAT的条件：即每个子句中至少包含一个真文字和一个假文字。对于含有$m$个子句的公式，该验证过程的时间复杂度为$O(m)$，属于多项式时间。因此，NAE-3SAT属于NP类。
+    \item 然后证明MNot-All-Equal 3SAT问题属于NP-complete。\\
+    设3SAT实例为$\phi = \bigwedge_{i=1}^m C_i$，其中每个子句$C_i = (a_i \lor b_i \lor c_i)$。我们构造NAE-3SAT实例$\phi'$如下：
+    引入一个全局新变量$s$，对每个子句$C_i$引入一个新变量$w_{C_i}$，将$C_i$替换为两个NAE-3SAT子句：
+    $$(a_i \lor b_i \lor w_{C_i}), \quad (\neg w_{C_i} \lor c_i \lor s)$$
+
+    该归约过程仅需添加$m+1$个变量和$2m$个子句，时间复杂度为$O(m)$，是多项式时间归约。
+
+    下面证明归约的正确性：
+
+    \noindent\textbf{$\Rightarrow$ 若$\phi$可满足，则$\phi'$存在NAE赋值}\\
+    设$\sigma$是$\phi$的一个满足赋值。我们构造$\phi'$的赋值$\sigma'$：\\
+    - 令$\sigma'(s) = \text{False}$\\
+    - 对每个子句$C_i$：\\
+    - 若$\sigma(a_i) = \text{True}$或$\sigma(b_i) = \text{True}$：令$\sigma'(w_{C_i}) = \text{False}$。此时子句$(a_i \lor b_i \lor w_{C_i})$同时包含真文字和假文字，满足NAE条件；子句$(\neg w_{C_i} \lor c_i \lor s)$中$\neg w_{C_i} = \text{True}$，$s = \text{False}$，也满足NAE条件。\\
+    - 若$\sigma(a_i) = \text{False}$且$\sigma(b_i) = \text{False}$：由于$\sigma$满足$C_i$，必有$\sigma(c_i) = \text{True}$，令$\sigma'(w_{C_i}) = \text{True}$。此时子句$(a_i \lor b_i \lor w_{C_i})$同时包含假文字和真文字，满足NAE条件；子句$(\neg w_{C_i} \lor c_i \lor s)$中$c_i = \text{True}$，$s = \text{False}$，也满足NAE条件。\\
+    因此，$\sigma'$是$\phi'$的一个NAE赋值。
+
+    \noindent\textbf{$\Leftarrow$ 若$\phi'$存在NAE赋值，则$\phi$可满足}\\
+    设$\sigma'$是$\phi'$的一个NAE赋值。我们分两种情况讨论：\\
+    1. 若$\sigma'(s) = \text{False}$：\\
+    - 若$\sigma'(w_{C_i}) = \text{False}$：则子句$(a_i \lor b_i \lor w_{C_i})$不能全为假，因此$a_i$或$b_i$为真，原子句$C_i$满足。\\
+    - 若$\sigma'(w_{C_i}) = \text{True}$：则子句$(\neg w_{C_i} \lor c_i \lor s)$中$\neg w_{C_i} = \text{False}$，$s = \text{False}$，因此$c_i$必须为真，原子句$C_i$满足。\\
+    2. 若$\sigma'(s) = \text{True}$：\\
+    根据NAE赋值的性质，将所有变量的赋值取反后得到的新赋值$\sigma''$仍然是$\phi'$的NAE赋值，且此时$\sigma''(s) = \text{False}$。回到情况1，$\sigma''$在原变量上的限制满足$\phi$。\\
+    综上，3SAT可以多项式时间归约到NAE-3SAT，因此NAE-3SAT是NP难的。
+\end{enumerate}
+
+\begin{exercise}
+ The problem \textsc{Set Packing}:
+
+{\bf Input}: A set $E$, a list $S_1,\ldots, S_m$ of subsets of $E$ and an integer $k$.
+
+{\bf Question}: Are there $k$ sets in the list that are pairwise disjoint?
+
+Prove the \textsc{Set Packing} is NP-complete.
+\end{exercise}
+\\\\
+\noindent\textbf{Solution:}
+\begin{enumerate}
+    \item 首先证明Set Packing问题属于NP。\\
+    对于集合包装问题，给定一个由$k$个子集组成的候选解，我们可以验证：
+    \begin{enumerate}
+        \item 候选解恰好包含$k$个子集。
+        \item 候选解中的每一对子集都是两两不相交的。
+    \end{enumerate}
+    验证过程的时间复杂度为$O(k^2 \cdot |E|)$，其中$k \leq m$，$|E|$是全集的大小。这显然是关于输入规模的多项式时间，因此集合包装问题属于NP类。
+    \item 然后证明Set Packing问题属于NP-complete。\\
+    对于独立集问题的任意实例$(G=(V,E), k)$，我们构造集合包装问题的实例如下：
+    \begin{itemize}
+        \item 全集$U = V \cup E$（包含图的所有顶点和边）。
+        \item 对每个顶点$v \in V$，定义子集$S_v = \{v\} \cup \{ (u,v) \mid (u,v) \in E \}$（即$S_v$包含顶点$v$本身以及所有与$v$关联的边）。
+        \item 集合包装问题的参数$k$与独立集问题的参数$k$相同。
+    \end{itemize}
+    需要证明：图$G$有大小为$k$的独立集当且仅当存在$k$个两两不相交的子集$S_{v_1},\dots,S_{v_k}$。\\
+    \noindent\textbf{$\Rightarrow$} 假设$I = \{v_1, \dots, v_k\}$是图$G$中大小为$k$的独立集。对于任意两个不同的顶点$v_i, v_j \in I$，根据独立集的定义，它们之间没有边相连。因此：\\
+    - $S_{v_i}$和$S_{v_j}$不共享任何顶点（因为$v_i \neq v_j$）。\\
+    - $S_{v_i}$和$S_{v_j}$不共享任何边（因为它们之间没有边）。\\
+    所以$S_{v_i} \cap S_{v_j} = \emptyset$，即这$k$个子集是两两不相交的。\\
+
+    \noindent\textbf{$\Leftarrow$} 假设存在$k$个两两不相交的子集$S_{v_1}, \dots, S_{v_k}$。对于任意两个不同的顶点$v_i, v_j$，如果它们之间存在边$(v_i, v_j) \in E$，那么这条边会同时属于$S_{v_i}$和$S_{v_j}$，这与两个子集不相交的条件矛盾。因此$v_i$和$v_j$之间没有边相连，所以$\{v_1, \dots, v_k\}$是图$G$中大小为$k$的独立集。\\
+
+    综上，集合包装问题可以归约到独立集问题，因此集合包装问题属于NP-complete。
+    
+\end{enumerate}
+
+
+
+\begin{exercise}
+Given a graph $G=(V,E)$, a \textsc{Feedback Vertex Set} problem is that whether there exists a subset of vertices $S\subseteq V$ with $|S|=k$ such that removing all vertices in $S$ destroys every cycle in $G$. The remaining subgraph is acyclic.
+\end{exercise}
+\\\\
+\noindent\textbf{Solution:}
+这个问题是一个NP-complete问题，应该是要做证明？(下面做FVS问题的NP-complete证明)
+\begin{enumerate}
+    \item 首先证明FVS问题属于NP。\\
+    给定图$G=(V,E)$和整数$k$，候选证书为顶点子集$S\subseteq V$。验证算法在多项式时间内完成：
+    \begin{enumerate}
+        \item 检查$|S|\leq k$，时间复杂度$O(|V|)$
+        \item 构造子图$G-S$并检测无环性，时间复杂度$O(|V|+|E|)$
+    \end{enumerate}
+    验证过程为多项式时间，故$\text{FVS}\in\text{NP}$。
+    \item 然后证明FVS问题属于NP-complete。\\
+    对VC实例$(G'=(V',E'),k')$，构造FVS实例$(G=(V,E),k)$：
+    \begin{itemize}
+        \item 顶点集：$V = V' \cup \{w_e \mid e\in E'\}$，$w_e$为边$e$新增顶点
+        \item 边集：$E = E' \cup \{\{u,w_e\},\{v,w_e\} \mid e=(u,v)\in E'\}$，形成三角形$u-v-w_e-u$
+        \item 参数：$k = k'$
+    \end{itemize}
+    构造时间复杂度$O(|V'|+|E'|)$，为多项式时间。\\
+    \noindent\textbf{$\Rightarrow$}：若$S'$是$G'$的大小$\leq k'$的顶点覆盖，则$S'$是$G$的FVS。
+    $G$中任意环要么是$G'$的原生环（被顶点覆盖破坏），要么包含$w_e$（需同时包含$u,v$，被顶点覆盖破坏），故$G-S'$无环。
+
+    \noindent\textbf{$\Leftarrow$}：若$S$是$G$的大小$\leq k$的FVS，构造$S'\subseteq V'$：将$S\cap V'$加入$S'$，将$S$中$w_e$替换为$u$或$v$加入$S'$。
+    $|S'|\leq |S|\leq k'$，且对任意边$e=(u,v)$，三角形$T_e$必有顶点在$S$中，故$u$或$v$在$S'$中，$S'$是$G'$的顶点覆盖。
+
+    综上，FVS问题可以归约到顶点覆盖问题，因此FVS问题属于NP-complete。
+
+\end{enumerate}
+
+
+\end{document}
