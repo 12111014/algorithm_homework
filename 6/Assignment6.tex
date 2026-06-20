@@ -1,0 +1,107 @@
+\documentclass{article}
+\usepackage{times}
+\usepackage{a4wide}
+\usepackage{latexsym}
+\usepackage{mathrsfs}
+\usepackage{amsmath}
+\usepackage{amssymb}
+\usepackage{amsthm}
+\usepackage{ifthen}
+\usepackage{stmaryrd}
+\usepackage{algorithm}
+%\usepackage{algorithmic}
+\usepackage{algpseudocode}
+\usepackage{graphics}
+\usepackage{epsfig}
+%\usepackage{ramacros}
+
+\addtolength{\textwidth}{20mm}
+\addtolength{\oddsidemargin}{-10mm}
+\addtolength{\textheight}{18mm}
+\addtolength{\topmargin}{-9mm}
+
+\newcounter{exercise}
+\setcounter{exercise}{0}
+\newcommand{\exercise}{
+        \addtocounter{exercise}{1}
+        \vspace{0.2in}
+        \noindent
+        {\bf \theexercise .}
+        }
+
+\newcommand{\REMARK}[1]{}
+
+
+\newcommand{\NEWPART}{\vspace{.1in}
+              \noindent}
+
+\newcommand{\<}{
+    \langle}
+
+\renewcommand{\>}{
+    \rangle}
+
+\newcommand{\ceil}[1]{\left\lceil #1 \right\rceil}
+
+\pagestyle{plain} \pagenumbering{arabic}
+
+\title{{\bf Assignment 6} }
+
+\author{}
+\date{Jun. 7}
+
+\begin{document}
+\maketitle
+
+%{\large \noindent
+%\begin{tabular}{lcl}
+%{Jan 17 2007}.
+%\end{tabular}
+%}
+
+{\large
+
+\begin{exercise}
+Use layering to get a factor $f$ approximation algorithm for set cover,
+where $f$ is the frequency of the most frequent element. Provide a tight example
+for this algorithm.
+
+\end{exercise}
+
+
+
+
+\begin{exercise}
+	\textbf{(Hamilton cycle)} Given an undirected complete graph, each edge is assigned with a nonnegative cost by the function $c$ (eg. the cost for edge $(u,v)$ is $c(u,v)$). Find a Hamilton cycle with the largest cost by the greedy approach, and prove the guarantee factor is $2$.
+\end{exercise}
+
+
+
+\begin{exercise}
+	\textbf{(Knapsack)} Given a set $S = \{a_1, ... , a_n\}$ of objects, with specified non-negative weights and profits, $w_i,p_i$ respectively, and a "knapsack capacity" $B (w_i \le B)$, find a subset of objects whose total weight is bounded by $B$ and total profit is maximized.
+	
+	1. Consider two types of greedy algorithms for the knapsack problem. Sort the objects by decreasing \textbf{ratio of profit to weight} or only by \textbf{profit}, and then greedily pick objects in this order. Show that these two algorithms can be made to perform arbitrarily badly.
+	
+	2. Combining these two greedy algorithm, pick the more profitable solution in these two algorithms' results. Show that this algorithm achieves an approximation factor of $2$.
+\end{exercise}
+
+\begin{exercise}
+	\textbf{(Bin Packing)} Consider a more restricted algorithm than First-Fit, called Next-Fit, which tries to pack the next item only in the most recently started bin. If it does not fit, it is packed in a new bin. Show that this algorithm also achieves factor $2$. Give a factor $2$ tight example.
+\end{exercise}
+
+
+\begin{exercise}
+The \textbf{maximum cut problem} is defined as follows: Given an undirected graph $G=(V,E)$ along with a nonnegative weight $w_{ij}\ge 0$ for each $(i,j)\in E$. The goal is to partition the vertex set into two parts, $U$ and $W=V-U$, so as to maximize the weight of the edges whose two endpoints are in different parts. Give a $2$-approximation randomized algorithm for maximum cut problem.
+\end{exercise}
+
+\begin{exercise}
+Given an undirected graph $G = (V, E)$ in which each node has degree $\le d$, find an approximation algorithm of maximal independent set with the factor $1/(d+1)$.
+\end{exercise}
+
+\begin{exercise}
+	Let $G$ be a complete undirected graph in which all edge lengths are either $1$ or $2$. Note, that edge lengths satisfy the triangle inequality. Give a factor $4/3$ approximation algorithm for the TSP in this special class of graphs.
+	
+Hint: A $2$-matching in a graph $G$ is a subset of edges $M$, such that every vertex is incident to exactly $2$ edges of $M$. A minimum cost $2$-matching can be computed in polynomial time.
+\end{exercise}
+
+\end{document}
